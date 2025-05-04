@@ -1,0 +1,88 @@
+### 						Interaction parameters
+variable	xkkn	equal	1.0
+variable        xkkt    equal   1.0
+variable        gamn 	equal	0.5
+variable        gamt    equal   0.5*v_gamn
+
+variable        DMU string 0.3
+variable        PRESS string 1e-5
+variable        PGAIN string 1e-4
+
+###             Create required directories
+variable        Pgain equal ${PGAIN}
+variable 	dmu equal ${DMU}
+variable        Press equal ${PRESS}
+
+### 			Simulation parameters
+atom_style		sphere
+boundary		p p p
+newton			off
+comm_style		brick
+comm_modify		mode single vel yes cutoff 1.0
+
+###             Read Data File
+read_data 		start0.4.data # Filename for initial data
+change_box 		all triclinic
+
+### 			Neighbor list setup
+neighbor		0.4	bin
+neigh_modify		check	yes
+
+###             Grain-grain interaction
+pair_style      gran/hooke/history ${xkkn} ${xkkt} ${gamn} ${gamt} ${dmu} 1
+pair_coeff		* *
+
+#################################### Pressure and Stress #############################################
+compute		stressnoKE all pressure NULL virial
+compute		stressKE all pressure thermo_temp
+compute		tempflow all temp/deform
+compute		stressKEflow all pressure tempflow
+
+variable	pnoKE   equal (c_stressnoKE[1]+c_stressnoKE[2]+c_stressnoKE[3])/3.0
+variable 	pKE     equal (c_stressKE[1]+c_stressKE[2]+c_stressKE[3])/3.0
+variable 	pKEflow equal (c_stressKEflow[1]+c_stressKEflow[2]+c_stressKEflow[3])/3.0
+
+variable        xxnoKE  equal c_stressnoKE[1]
+variable        yynoKE  equal c_stressnoKE[2]
+variable        zznoKE  equal c_stressnoKE[3]
+variable        xynoKE  equal c_stressnoKE[4]
+variable        xznoKE  equal c_stressnoKE[5]
+variable        yznoKE  equal c_stressnoKE[6]
+variable        xxKE    equal c_stressKE[1]
+variable        yyKE    equal c_stressKE[2]
+variable        zzKE    equal c_stressKE[3]
+variable        xyKE    equal c_stressKE[4]
+variable        xzKE    equal c_stressKE[5]
+variable        yzKE    equal c_stressKE[6]
+variable        xxKEflow    equal c_stressKEflow[1]
+variable        yyKEflow    equal c_stressKEflow[2]
+variable        zzKEflow    equal c_stressKEflow[3]
+variable        xyKEflow    equal c_stressKEflow[4]
+variable        xzKEflow    equal c_stressKEflow[5]
+variable        yzKEflow    equal c_stressKEflow[6]
+
+variable        muKEnum     equal "(v_xxKE-v_pKE)^2+(v_yyKE-v_pKE)^2+(v_zzKE-v_pKE)^2 +2.0*(v_xyKE^2)+2.0*(v_yzKE^2)+2.0*(v_xzKE^2)"
+variable        muKE	equal sqrt(0.5*v_muKEnum)/v_pKE
+
+variable 	KE equal ke
+variable        STEP equal step
+
+#########################  Forces & Geomtery (Coordination Number, Vol. Fraction) #################
+###             Normal and tangential forces
+compute         2 all property/local patom1 patom2 cutoff radius
+compute         3 all pair/local force p4 cutoff radius
+
+### 						Coordination number, volume fraction
+compute         8 all contact/atom
+compute         9 all reduce sum c_8
+compute         10 all property/atom diameter
+
+###             Volume fraction
+variable        radius atom 0.50*c_10
+variable        pvol atom PI*(c_10^3.0)/6.0
+compute         13 all reduce sum v_pvol
+variable        vfac equal c_13/vol
+
+############################################ Fix NVE/SPHERE #################################################
+# This fix is for the motion of particles
+fix		nve_id all nve/sphere
