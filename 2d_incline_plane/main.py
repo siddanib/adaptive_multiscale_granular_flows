@@ -33,7 +33,7 @@ amr.initialize_when_MPMD([], app_comm)
 min_conc = 0.0 # Minimum concentration of second fluid
 # Create a ParmParse to collect this information
 parser_amr = amr.ParmParse()
-parser_amr.addfile("inputs_column_gravity")
+parser_amr.addfile("inputs_inclined_plane")
 min_conc = parser_amr.get_real("incflo.second_fluid.min_conc")
 
 # DDP Initialize

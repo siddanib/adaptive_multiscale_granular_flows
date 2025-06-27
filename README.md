@@ -1,6 +1,6 @@
 # An adaptive, data-driven multiscale approach for dense granular flows
 
-This repository has the code used to carry out the work in the [manuscript](arXiv link)
+This repository has the code used to carry out the work in the [manuscript](https://arxiv.org/abs/2505.13458)
 
 ## Dependencies
 
