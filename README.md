@@ -1,6 +1,7 @@
 # An adaptive, data-driven multiscale approach for dense granular flows
 
-This repository has the code used to carry out the work in the [manuscript](https://arxiv.org/abs/2505.13458)
+This repository has the code used to carry out the work in the manuscript
+[[doi]](https://www.sciencedirect.com/science/article/pii/S0045782525005663) [[arXiv]](https://arxiv.org/abs/2505.13458).
 
 ## Dependencies
 
@@ -57,6 +58,21 @@ Use the GNUMake file in a setup folder to compile ``incflo`` (continuum solver).
 
 **Ensure to build both incflo and pyAMReX using the same AMReX version.**
 
+## Citation
+
+```
+@article{SIDDANI2025118294,
+title = {An adaptive, data-driven multiscale approach for dense granular flows},
+journal = {Computer Methods in Applied Mechanics and Engineering},
+volume = {446},
+pages = {118294},
+year = {2025},
+issn = {0045-7825},
+doi = {https://doi.org/10.1016/j.cma.2025.118294},
+url = {https://www.sciencedirect.com/science/article/pii/S0045782525005663},
+author = {B. Siddani and Weiqun Zhang and Andrew Nonaka and John Bell and Ishan Srivastava}
+}
+```
 ## Acknowledgments
 
 This work was supported by the U.S. Department of Energy (DOE), Office of Science,
