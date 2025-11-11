@@ -15,6 +15,8 @@ This repository has the code used to carry out the work in the manuscript
 [pyblock](https://pyblock.readthedocs.io/en/latest/index.html);
 [CMake](https://cmake.org/)
 
+Please note that the linked **incflo** code is a forked version: [https://github.com/siddanib/incflo/tree/tracer_two_fluid](https://github.com/siddanib/incflo/tree/tracer_two_fluid)
+
 ## Python virtual environment
 
 This work was carried out using GPUs on NERSC Perlmutter.
